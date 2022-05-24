@@ -1,4 +1,4 @@
-package team.inside.TestTask;
+package team.inside.TestTask.Enteti;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
