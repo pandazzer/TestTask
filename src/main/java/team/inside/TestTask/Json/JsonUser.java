@@ -1,4 +1,4 @@
-package team.inside.TestTask.Enteti;
+package team.inside.TestTask.Json;
 
 public class JsonUser {
     private String name;
