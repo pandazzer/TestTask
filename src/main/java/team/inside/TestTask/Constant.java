@@ -1,5 +1,5 @@
 package team.inside.TestTask;
 
 public interface Constant {
-    int validTime = Integer.parseInt(System.getenv("time"));
+    int validTime = Integer.parseInt(System.getenv("time"))*60000;
 }

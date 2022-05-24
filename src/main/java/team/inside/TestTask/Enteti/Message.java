@@ -1,21 +1,31 @@
 package team.inside.TestTask.Enteti;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "Message_DB")
 public class Message {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "counter", nullable = false)
+    private Long counter;
+    @Column
     private Long id;
     @Column
     private String message;
     @Column(columnDefinition = "TIMESTAMP")
     private Date date;
+
+
+    public Message() {
+    }
+
+    public Message(Long id, String message, Date date) {
+        this.id = id;
+        this.message = message;
+        this.date = date;
+    }
 
     public Long getId() {
         return id;
@@ -31,5 +41,9 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Long getCounter() {
+        return counter;
     }
 }

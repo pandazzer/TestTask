@@ -10,8 +10,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.inside.TestTask.Component.TokenService;
+import team.inside.TestTask.Component.Service;
+import team.inside.TestTask.Enteti.Message;
 import team.inside.TestTask.Enteti.Token;
+import team.inside.TestTask.Json.JsonMessage;
+import team.inside.TestTask.Json.JsonSomeMessage;
 import team.inside.TestTask.Json.JsonToken;
 import team.inside.TestTask.Json.JsonUser;
 import team.inside.TestTask.Enteti.User;
@@ -20,6 +23,7 @@ import team.inside.TestTask.Repository.TokenRepository;
 import team.inside.TestTask.Repository.UserRepository;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -52,12 +56,9 @@ public class Controller implements Constant {
             log.info("Имя или пароль не подходит");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        String newToken = context.getBean(TokenService.class).getToken(jsonUser.getName());
+        String newToken = context.getBean(Service.class).getToken(jsonUser.getName());
         Token token = new Token(user.getId(), newToken, new Date());
         tokenRepository.save(token);
-
-//        String a = Jwts.parser().setSigningKey(key).parseClaimsJws(newToken).getHeader().toString();
-//        String ab = Jwts.parser().setSigningKey(key).parseClaimsJws(newToken).getBody().toString();
 
         JsonToken jsonToken = new JsonToken();
         jsonToken.setToken(newToken);
@@ -66,21 +67,38 @@ public class Controller implements Constant {
         return new ResponseEntity(jsonResponse,HttpStatus.OK);
     }
     @PostMapping(path = "/message")
-    public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json){
+    public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json) throws JsonProcessingException {
         String tokenWithoutBarer = tokenWithBearer.substring(7);
-        context.getBean(TokenService.class).validToken(tokenWithoutBarer);
+        context.getBean(Service.class).validToken(tokenWithoutBarer);
         Token token = tokenRepository.findBytoken(tokenWithoutBarer);
         if (token == null){
             log.info("токен не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+
         long timeNow = new Date().getTime();
         long timeWrite = token.getDate().getTime();
         if (timeNow - timeWrite >= validTime){
             log.info("токен устарел");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
+        ObjectMapper mapper = new ObjectMapper();
+        JsonMessage jsonMessage = mapper.readValue(json, JsonMessage.class);
+        String message = jsonMessage.getMessage();
+        String[] messageArray = message.split(" ");
+        if (messageArray[0].equals("history")){
+            int numberMessage = Integer.parseInt(messageArray[1]);
+            List<Message> list = messageRepository.findByid(token.getId());
+            String[] arrayMessage = context.getBean(Service.class).getArrayMessage(list, numberMessage);
+            JsonSomeMessage jsonSomeMessage = new JsonSomeMessage();
+            jsonSomeMessage.setMessage(arrayMessage);
+            String jsonResponse = mapper.writeValueAsString(jsonSomeMessage);
+            return new ResponseEntity(jsonResponse, HttpStatus.OK);
+        }
 
-        return ResponseEntity.ok("sd");
+        Message messageToDB = new Message(token.getId(), message, new Date());
+        messageRepository.save(messageToDB);
+
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 }
