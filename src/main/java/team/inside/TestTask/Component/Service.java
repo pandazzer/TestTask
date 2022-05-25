@@ -35,7 +35,7 @@ public class Service {
     public boolean validToken(String token){
         try {
             Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-            log.info("Токен валидирован");
+            log.info("Токен валиден");
             return true;
         }catch (SignatureException e){
             log.info("Неправильный токен");

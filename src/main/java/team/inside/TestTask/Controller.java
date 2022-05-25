@@ -69,7 +69,9 @@ public class Controller implements Constant {
     @PostMapping(path = "/message")
     public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json) throws JsonProcessingException {
         String tokenWithoutBarer = tokenWithBearer.substring(7);
-        context.validToken(tokenWithoutBarer);
+        if (!context.validToken(tokenWithoutBarer)){
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
         Token token = tokenRepository.findBytoken(tokenWithoutBarer);
         if (token == null){
             log.info("токен не найден");
