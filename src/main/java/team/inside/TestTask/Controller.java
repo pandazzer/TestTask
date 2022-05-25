@@ -44,22 +44,22 @@ public class Controller implements Constant {
     @PostMapping(path = "/authentication")
     public ResponseEntity getToken(@RequestBody String json) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-        JsonUser jsonUser = mapper.readValue(json, JsonUser.class);
+        JsonUser jsonUser = mapper.readValue(json, JsonUser.class); // перевод из полученного json в объект jsonUser
 
-        User user = userRepository.findByusers(jsonUser.getName());
+        User user = userRepository.findByusers(jsonUser.getName()); // поиск user-а по имени в базе данных
         if (user == null){
             log.info("Пользователь не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        if (!jsonUser.getPassword().equals(user.getPassword())){
+        if (!jsonUser.getPassword().equals(user.getPassword())){    // сравнение полученного пароля с паролем записанным в базе
             log.info("Имя или пароль не подходит");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        String newToken = context.getToken(jsonUser.getName());
-        Token token = new Token(user.getId(), newToken, new Date());
+        String newToken = context.getToken(jsonUser.getName());     // генерация токена
+        Token token = new Token(user.getId(), newToken, new Date());    // запись токена в бд или перезапись токена если у пользователя уже он был
         tokenRepository.save(token);
 
-        JsonToken jsonToken = new JsonToken();
+        JsonToken jsonToken = new JsonToken();                      // создание и отправка пользователю токена в формате json
         jsonToken.setToken(newToken);
         String jsonResponse = mapper.writeValueAsString(jsonToken);
 
@@ -68,11 +68,11 @@ public class Controller implements Constant {
 
     @PostMapping(path = "/message")
     public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json) throws JsonProcessingException {
-        String tokenWithoutBarer = tokenWithBearer.substring(7);
-        if (!context.validToken(tokenWithoutBarer)){
+        String tokenWithoutBarer = tokenWithBearer.substring(7);    // удаление слова "Bearer" из полученого токена
+        if (!context.validToken(tokenWithoutBarer)){                          // проверка токена на соответсвие нынешнему ключу (ключ генерируется при каждом новом запуске программы)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        Token token = tokenRepository.findBytoken(tokenWithoutBarer);
+        Token token = tokenRepository.findBytoken(tokenWithoutBarer);         // поиск токена в базе и проверка на наличие и срок действия
         if (token == null){
             log.info("токен не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -85,25 +85,25 @@ public class Controller implements Constant {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();                               // перевод из полученного json в объект jsonMessage
         JsonMessage jsonMessage = mapper.readValue(json, JsonMessage.class);
         String message = jsonMessage.getMessage();
 
-        String[] messageArray = message.split(" ");
+        String[] messageArray = message.split(" ");                     // разбиение сообщения и проверка на соответсвие формата "history N"
         if (messageArray[0].equals("history")){
-
             int numberMessage = Integer.parseInt(messageArray[1]);
-            List<Message> list = messageRepository.findByid(token.getId());
-            String[] arrayMessage = context.getArrayMessage(list, numberMessage);
 
-            JsonSomeMessage jsonSomeMessage = new JsonSomeMessage();
+            List<Message> list = messageRepository.findByid(token.getId());     // поиск всех сообщений в бд по индексу пользователя, полученный из токена
+            String[] arrayMessage = context.getArrayMessage(list, numberMessage);   // получение нужного количества последних сообщений от пользователя
+
+            JsonSomeMessage jsonSomeMessage = new JsonSomeMessage();        // перевод сообщений в json и отправка пользователю
             jsonSomeMessage.setMessage(arrayMessage);
             String jsonResponse = mapper.writeValueAsString(jsonSomeMessage);
 
             return new ResponseEntity(jsonResponse, HttpStatus.OK);
         }
 
-        Message messageToDB = new Message(token.getId(), message, new Date());
+        Message messageToDB = new Message(token.getId(), message, new Date());  // запись полученного сообщения в бд
         messageRepository.save(messageToDB);
 
         return new ResponseEntity(HttpStatus.CREATED);
