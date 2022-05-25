@@ -1,10 +1,10 @@
-package team.inside.TestTask.Enteti;
+package team.inside.TestTask.Enteties;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Message_DB")
+@Table(name = "Messages")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

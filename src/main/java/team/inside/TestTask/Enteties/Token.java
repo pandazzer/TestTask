@@ -1,4 +1,4 @@
-package team.inside.TestTask.Enteti;
+package team.inside.TestTask.Enteties;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "token_db")
+@Table(name = "tokens")
 public class Token {
     @Id
     @Column(name = "id", nullable = false)
@@ -15,14 +15,14 @@ public class Token {
     @Column
     private String token;
     @Column(name = "date", columnDefinition = "TIMESTAMP")
-    private Date date;
+    private Date createDate;
 
     public Token() {}
 
     public Token(Long id, String token, Date date) {
         this.id = id;
         this.token = token;
-        this.date = date;
+        this.createDate = date;
     }
 
     public String getToken() {
@@ -34,11 +34,11 @@ public class Token {
     }
 
     public Date getDate() {
-        return date;
+        return createDate;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.createDate = date;
     }
 
     public Long getId() {

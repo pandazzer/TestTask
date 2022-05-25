@@ -1,9 +1,9 @@
-package team.inside.TestTask.Enteti;
+package team.inside.TestTask.Enteties;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users_DB")
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
