@@ -1,4 +1,4 @@
-package team.inside.TestTask.Component;
+package team.inside.TestTask.Components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import team.inside.TestTask.Constant;
 import team.inside.TestTask.Enteties.Token;
 import team.inside.TestTask.Enteties.User;
 import team.inside.TestTask.Json.JsonToken;
@@ -23,7 +24,7 @@ import java.security.Key;
 import java.util.Date;
 
 @Component(value = "Token")
-public class TokensService {
+public class TokensService implements Constant {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
@@ -78,5 +79,10 @@ public class TokensService {
             log.info("Неправильный токен");
             return false;
         }
+    }
+
+    public Token findToken(String tokenWithoutBarer) {
+        Token token = tokenRepository.findBytoken(tokenWithoutBarer);         // поиск токена в базе
+        return token;
     }
 }

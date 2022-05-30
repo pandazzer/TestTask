@@ -1,9 +1,10 @@
-package team.inside.TestTask.Component;
+package team.inside.TestTask.Components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import team.inside.TestTask.Enteties.Token;
 import team.inside.TestTask.Json.JsonMessage;
 import team.inside.TestTask.Json.JsonSomeMessage;
 import team.inside.TestTask.Repository.MessagesRepository;
-import team.inside.TestTask.Repository.TokenRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,22 +21,20 @@ import java.util.List;
 @Component(value = "Message")
 public class MessagesService implements Constant {
 
-    private final TokenRepository tokenRepository;
     private final MessagesRepository messageRepository;
     Logger log = LogManager.getLogger();
-
-    public MessagesService(TokenRepository tokenRepository, MessagesRepository messageRepository) {
-        this.tokenRepository = tokenRepository;
+    @Autowired
+    public MessagesService(MessagesRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 
-    public ResponseEntity getResponseForMessage (String tokenWithoutBarer, String json, boolean isValid) throws JsonProcessingException {
+    public ResponseEntity getResponseForMessage (String json, boolean isValid, Token token) throws JsonProcessingException {
 
         if (!isValid){                                                       // проверка токена на соответсвие нынешнему ключу (ключ генерируется при каждом новом запуске программы)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        Token token = tokenRepository.findBytoken(tokenWithoutBarer);         // поиск токена в базе и проверка на наличие и срок действия
-        if (token == null){
+
+        if (token == null){                                                 // проверка токена на наличие и срок действия
             log.info("токен не найден");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
