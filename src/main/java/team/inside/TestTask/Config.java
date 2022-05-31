@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan("team.inside.TestTask.*")
-@EnableJpaRepositories(basePackages = {"team.inside.TestTask.*"})
-@EntityScan("team.inside.TestTask.*")
-@EnableAutoConfiguration
+
 public class Config {
 
 }

@@ -20,10 +20,8 @@ import java.util.Date;
 import java.util.List;
 @Component(value = "Message")
 public class MessagesService implements Constant {
-    @Autowired
     private final MessagesRepository messageRepository;
     Logger log = LogManager.getLogger();
-    @Autowired
     public MessagesService(MessagesRepository messageRepository) {
         this.messageRepository = messageRepository;
     }

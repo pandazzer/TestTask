@@ -25,14 +25,11 @@ import java.util.Date;
 
 @Component(value = "Token")
 public class TokensService implements Constant {
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final TokenRepository tokenRepository;
     Logger log = LogManager.getLogger();
 
     private final Key key;
-    @Autowired
     public TokensService(UserRepository userRepository, TokenRepository tokenRepository) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
