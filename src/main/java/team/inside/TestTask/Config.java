@@ -1,12 +1,17 @@
 package team.inside.TestTask;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@ComponentScan("team.inside.TestTask.Components")
+@ComponentScan("team.inside.TestTask.*")
+@EnableJpaRepositories(basePackages = {"team.inside.TestTask.*"})
+@EntityScan("team.inside.TestTask.*")
+@EnableAutoConfiguration
 public class Config {
 
 }
