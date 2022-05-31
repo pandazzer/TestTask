@@ -9,7 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.inside.TestTask.Component.Service;
+import team.inside.TestTask.Components.Service;
 import team.inside.TestTask.Enteti.Message;
 import team.inside.TestTask.Enteti.Token;
 import team.inside.TestTask.Enteti.User;

@@ -1,4 +1,4 @@
-package team.inside.TestTask.Component;
+package team.inside.TestTask.Components;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
