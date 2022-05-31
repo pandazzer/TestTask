@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "token_db")
+@Table(name = "tokens")
 public class Token {
     @Id
     @Column(name = "id", nullable = false)

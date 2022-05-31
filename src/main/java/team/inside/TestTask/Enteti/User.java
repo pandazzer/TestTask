@@ -3,7 +3,7 @@ package team.inside.TestTask.Enteti;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users_DB")
+@Table(name = "Users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
