@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.inside.TestTask.Components.Service;
+import team.inside.TestTask.Components.TokensService;
 import team.inside.TestTask.Enteti.Message;
 import team.inside.TestTask.Enteti.Token;
 import team.inside.TestTask.Enteti.User;
@@ -32,7 +33,7 @@ public class Controller implements Constant {
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
     private final TokenRepository tokenRepository;
-    private final Service context = new AnnotationConfigApplicationContext(Config.class).getBean(Service.class);
+    private final ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
 
     @Autowired
     public Controller(UserRepository userRepository, MessageRepository messageRepository, TokenRepository tokenRepository) {
@@ -55,7 +56,7 @@ public class Controller implements Constant {
             log.info("Имя или пароль не подходит");
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        String newToken = context.getToken(jsonUser.getName());     // генерация токена
+        String newToken = context.getBean(TokensService.class).getToken(jsonUser.getName());     // генерация токена
         Token token = new Token(user.getId(), newToken, new Date());    // запись токена в бд или перезапись токена если у пользователя уже он был
         tokenRepository.save(token);
 
@@ -69,7 +70,7 @@ public class Controller implements Constant {
     @PostMapping(path = "/message")
     public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json) throws JsonProcessingException {
         String tokenWithoutBarer = tokenWithBearer.substring(7);    // удаление слова "Bearer" из полученого токена
-        if (!context.validToken(tokenWithoutBarer)){                          // проверка токена на соответсвие нынешнему ключу (ключ генерируется при каждом новом запуске программы)
+        if (!context.getBean(TokensService.class).validToken(tokenWithoutBarer)){                          // проверка токена на соответсвие нынешнему ключу (ключ генерируется при каждом новом запуске программы)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
         Token token = tokenRepository.findBytoken(tokenWithoutBarer);         // поиск токена в базе и проверка на наличие и срок действия
@@ -94,7 +95,7 @@ public class Controller implements Constant {
             int numberMessage = Integer.parseInt(messageArray[1]);
 
             List<Message> list = messageRepository.findByid(token.getId());     // поиск всех сообщений в бд по индексу пользователя, полученный из токена
-            String[] arrayMessage = context.getArrayMessage(list, numberMessage);   // получение нужного количества последних сообщений от пользователя
+            String[] arrayMessage = context.getBean(TokensService.class).getArrayMessage(list, numberMessage);   // получение нужного количества последних сообщений от пользователя
 
             JsonSomeMessage jsonSomeMessage = new JsonSomeMessage();        // перевод сообщений в json и отправка пользователю
             jsonSomeMessage.setMessage(arrayMessage);

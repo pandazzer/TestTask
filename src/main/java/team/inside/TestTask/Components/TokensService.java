@@ -14,13 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component(value = "Token")
-public class Service {
+public class TokensService {
 
     Logger log = LogManager.getLogger();
 
     private final Key key;
 
-    public Service() {
+    public TokensService() {
         this.key = MacProvider.generateKey();
     }
 
