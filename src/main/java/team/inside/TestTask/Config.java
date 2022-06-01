@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
-@ComponentScan("team.inside.TestTask.*")
-
+@ComponentScan("team.inside.TestTask.Components")
 public class Config {
 
 }

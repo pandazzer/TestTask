@@ -20,13 +20,10 @@ import java.util.Date;
 import java.util.List;
 @Component(value = "Message")
 public class MessagesService implements Constant {
-    private final MessagesRepository messageRepository;
-    Logger log = LogManager.getLogger();
-    public MessagesService(MessagesRepository messageRepository) {
-        this.messageRepository = messageRepository;
-    }
 
-    public ResponseEntity getResponseForMessage (String json, boolean isValid, Token token) throws JsonProcessingException {
+    Logger log = LogManager.getLogger();
+
+    public ResponseEntity getResponseForMessage (String json, boolean isValid, Token token, MessagesRepository messagesRepository) throws JsonProcessingException {
 
         if (!isValid){                                                       // проверка токена на соответсвие нынешнему ключу (ключ генерируется при каждом новом запуске программы)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -52,7 +49,7 @@ public class MessagesService implements Constant {
         if (messageArray[0].equals("history")){
             int numberMessage = Integer.parseInt(messageArray[1]);
 
-            List<Message> list = messageRepository.findByid(token.getId());     // поиск всех сообщений в бд по индексу пользователя, полученный из токена
+            List<Message> list = messagesRepository.findByid(token.getId());     // поиск всех сообщений в бд по индексу пользователя, полученный из токена
             String[] arrayMessage = getArrayMessages(list, numberMessage);   // получение нужного количества последних сообщений от пользователя
 
             JsonSomeMessage jsonSomeMessage = new JsonSomeMessage();        // перевод сообщений в json и отправка пользователю
@@ -63,7 +60,7 @@ public class MessagesService implements Constant {
         }
 
         Message messageToDB = new Message(token.getId(), message, new Date());  // запись полученного сообщения в бд
-        messageRepository.save(messageToDB);
+        messagesRepository.save(messageToDB);
 
         return new ResponseEntity(HttpStatus.CREATED);
     }

@@ -25,18 +25,16 @@ import java.util.Date;
 
 @Component(value = "Token")
 public class TokensService implements Constant {
-    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
+
     Logger log = LogManager.getLogger();
 
     private final Key key;
-    public TokensService(UserRepository userRepository, TokenRepository tokenRepository) {
-        this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
+    @Autowired
+    public TokensService() {
         this.key = MacProvider.generateKey();
     }
 
-    public ResponseEntity getResponseForUser(String json) throws JsonProcessingException {
+    public ResponseEntity getResponseForUser(String json, UserRepository userRepository, TokenRepository tokenRepository) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonUser jsonUser = mapper.readValue(json, JsonUser.class); // перевод из полученного json в объект jsonUser
 
@@ -79,7 +77,7 @@ public class TokensService implements Constant {
         }
     }
 
-    public Token findToken(String tokenWithoutBarer) {
+    public Token findToken(String tokenWithoutBarer, TokenRepository tokenRepository) {
         Token token = tokenRepository.findBytoken(tokenWithoutBarer);         // поиск токена в базе
         return token;
     }

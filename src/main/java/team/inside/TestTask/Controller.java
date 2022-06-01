@@ -16,31 +16,29 @@ import team.inside.TestTask.Repository.UserRepository;
 @RestController
 @RequestMapping
 public class Controller {
-    @Autowired
-    private final MessagesRepository messageRepository;
-    @Autowired
+
+    private final MessagesRepository messagesRepository;
     private final UserRepository userRepository;
-    @Autowired
     private final TokenRepository tokenRepository;
 
     private final ApplicationContext context = new AnnotationConfigApplicationContext(Config.class);
-
-    public Controller(MessagesRepository messageRepository, UserRepository userRepository, TokenRepository tokenRepository) {
-        this.messageRepository = messageRepository;
+    @Autowired
+    public Controller(MessagesRepository messagesRepository, UserRepository userRepository, TokenRepository tokenRepository) {
+        this.messagesRepository = messagesRepository;
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
     }
 
     @PostMapping(path = "/authentication")
     public ResponseEntity getToken(@RequestBody String json) throws JsonProcessingException {
-        return context.getBean(TokensService.class).getResponseForUser(json);
+        return context.getBean(TokensService.class).getResponseForUser(json, userRepository, tokenRepository);
     }
 
     @PostMapping(path = "/message")
     public ResponseEntity sendMessage(@RequestHeader("token") String tokenWithBearer, @RequestBody String json) throws JsonProcessingException {
         String tokenWithoutBarer = tokenWithBearer.substring(7);    // удаление слова "Bearer" из полученого токена
         boolean tokenIsValid = context.getBean(TokensService.class).validToken(tokenWithoutBarer);
-        Token token = context.getBean(TokensService.class).findToken(tokenWithoutBarer);
-        return context.getBean(MessagesService.class).getResponseForMessage(json, tokenIsValid, token);
+        Token token = context.getBean(TokensService.class).findToken(tokenWithoutBarer, tokenRepository);
+        return context.getBean(MessagesService.class).getResponseForMessage(json, tokenIsValid, token, messagesRepository);
     }
 }
