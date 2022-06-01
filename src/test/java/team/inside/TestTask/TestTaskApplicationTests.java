@@ -15,6 +15,9 @@ import team.inside.TestTask.Repository.MessagesRepository;
 import team.inside.TestTask.Repository.TokenRepository;
 import team.inside.TestTask.Repository.UserRepository;
 
+import java.util.List;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -26,8 +29,8 @@ class TestTaskApplicationTests {
 	private TokenRepository tokenRepository;
 	@Autowired
 	private MessagesRepository messagesRepository;
-	private String url = System.getenv("TEST_URL");
-	private String token;
+	//private String url = System.getenv("TEST_URL");
+	private String url ="http://localhost:8084";
 
 	@Test()
 	void contextLoads() {
@@ -52,7 +55,6 @@ class TestTaskApplicationTests {
 		String actualToken = mapper.readValue(response.getBody().asString(), JsonToken.class ).getToken();
 		String expectedToken = tokenRepository.findByid(userRepository.findByusers("Tester").getId()).getToken();
 		assertThat(actualToken).isEqualTo(expectedToken);
-		token = actualToken;
 	}
 
 	@Test
@@ -90,6 +92,7 @@ class TestTaskApplicationTests {
 		jsonMessage.setName("Tester");
 		jsonMessage.setMessage("Some message");
 		String message = mapper.writeValueAsString(jsonMessage);
+		String token = tokenRepository.findByid(userRepository.findByusers("Tester").getId()).getToken();
 		Header header = new Header("token", "Bearer_" + token);
 		given().baseUri(url)
 				.header(header)
@@ -105,6 +108,7 @@ class TestTaskApplicationTests {
 		jsonMessage.setName("Tester");
 		jsonMessage.setMessage("history 10");
 		String message = mapper.writeValueAsString(jsonMessage);
+		String token = tokenRepository.findByid(userRepository.findByusers("Tester").getId()).getToken();
 		Header header = new Header("token", "Bearer_" + token);
 		Response response = given().baseUri(url)
 				.header(header)
@@ -114,6 +118,8 @@ class TestTaskApplicationTests {
 				.statusCode(200)
 				.contentType(ContentType.JSON)
 				.extract().response();
+		List<String> list = response.jsonPath().getList("message");
+		assertThat(list.size()).isEqualTo(10);
 	}
 
 
