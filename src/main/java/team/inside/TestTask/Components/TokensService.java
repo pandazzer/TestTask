@@ -6,10 +6,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.crypto.MacProvider;
+import jdk.jfr.ContentType;
+import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import team.inside.TestTask.Constant;
@@ -55,7 +58,7 @@ public class TokensService implements Constant {
         jsonToken.setToken(newToken);
         String jsonResponse = mapper.writeValueAsString(jsonToken);
 
-        return new ResponseEntity(jsonResponse,HttpStatus.OK);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse); //new ResponseEntity(jsonResponse,HttpStatus.OK);
     }
 
     public String getToken(String userName){

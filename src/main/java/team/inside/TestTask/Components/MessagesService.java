@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import team.inside.TestTask.Constant;
@@ -31,14 +32,14 @@ public class MessagesService implements Constant {
 
         if (token == null){                                                 // проверка токена на наличие и срок действия
             log.info("токен не найден");
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity( HttpStatus.NOT_FOUND);
         }
 
         long timeNow = new Date().getTime();
         long timeWrite = token.getDate().getTime();
         if (timeNow - timeWrite >= validTime){
             log.info("токен устарел");
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity( HttpStatus.UNAUTHORIZED);
         }
 
         ObjectMapper mapper = new ObjectMapper();                               // перевод из полученного json в объект jsonMessage
@@ -56,7 +57,7 @@ public class MessagesService implements Constant {
             jsonSomeMessage.setMessage(arrayMessage);
             String jsonResponse = mapper.writeValueAsString(jsonSomeMessage);
 
-            return new ResponseEntity(jsonResponse, HttpStatus.OK);
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(jsonResponse);
         }
 
         Message messageToDB = new Message(token.getId(), message, new Date());  // запись полученного сообщения в бд

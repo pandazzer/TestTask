@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import team.inside.TestTask.Enteties.Token;
 public interface TokenRepository extends CrudRepository<Token, Long> {
     Token findBytoken(String token);
+    Token findByid(Long id);
 }
