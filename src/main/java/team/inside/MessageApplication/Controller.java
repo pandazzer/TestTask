@@ -1,4 +1,4 @@
-package team.inside.TestTask;
+package team.inside.MessageApplication;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,12 +6,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import team.inside.TestTask.Components.MessagesService;
-import team.inside.TestTask.Components.TokensService;
-import team.inside.TestTask.Enteties.Token;
-import team.inside.TestTask.Repository.MessagesRepository;
-import team.inside.TestTask.Repository.TokenRepository;
-import team.inside.TestTask.Repository.UserRepository;
+import team.inside.MessageApplication.Components.MessagesService;
+import team.inside.MessageApplication.Components.TokensService;
+import team.inside.MessageApplication.Enteties.Token;
+import team.inside.MessageApplication.Repository.MessagesRepository;
+import team.inside.MessageApplication.Repository.TokenRepository;
+import team.inside.MessageApplication.Repository.UserRepository;
 
 @RestController
 @RequestMapping

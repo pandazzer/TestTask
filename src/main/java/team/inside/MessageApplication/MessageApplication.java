@@ -1,13 +1,13 @@
-package team.inside.TestTask;
+package team.inside.MessageApplication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication()
-public class TestTaskApplication {
+public class MessageApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TestTaskApplication.class, args);
+		SpringApplication.run(MessageApplication.class, args);
 	}
 
 }

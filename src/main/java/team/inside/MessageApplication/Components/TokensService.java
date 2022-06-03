@@ -1,4 +1,4 @@
-package team.inside.TestTask.Components;
+package team.inside.MessageApplication.Components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,8 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.impl.crypto.MacProvider;
-import jdk.jfr.ContentType;
-import netscape.javascript.JSObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import team.inside.TestTask.Constant;
-import team.inside.TestTask.Enteties.Token;
-import team.inside.TestTask.Enteties.User;
-import team.inside.TestTask.Json.JsonToken;
-import team.inside.TestTask.Json.JsonUser;
-import team.inside.TestTask.Repository.TokenRepository;
-import team.inside.TestTask.Repository.UserRepository;
+import team.inside.MessageApplication.Constant;
+import team.inside.MessageApplication.Enteties.Token;
+import team.inside.MessageApplication.Enteties.User;
+import team.inside.MessageApplication.Json.JsonToken;
+import team.inside.MessageApplication.Json.JsonUser;
+import team.inside.MessageApplication.Repository.TokenRepository;
+import team.inside.MessageApplication.Repository.UserRepository;
 
 import java.security.Key;
 import java.util.Date;

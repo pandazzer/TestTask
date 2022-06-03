@@ -1,8 +1,7 @@
-package team.inside.TestTask.Repository;
+package team.inside.MessageApplication.Repository;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-import team.inside.TestTask.Enteties.Message;
+import team.inside.MessageApplication.Enteties.Message;
 
 import java.util.List;
 public interface MessagesRepository extends CrudRepository<Message, Long> {

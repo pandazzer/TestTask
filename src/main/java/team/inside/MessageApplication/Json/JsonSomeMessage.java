@@ -1,4 +1,4 @@
-package team.inside.TestTask.Json;
+package team.inside.MessageApplication.Json;
 
 public class JsonSomeMessage {
 

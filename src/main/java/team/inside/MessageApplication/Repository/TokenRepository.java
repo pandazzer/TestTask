@@ -1,8 +1,7 @@
-package team.inside.TestTask.Repository;
+package team.inside.MessageApplication.Repository;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-import team.inside.TestTask.Enteties.Token;
+import team.inside.MessageApplication.Enteties.Token;
 public interface TokenRepository extends CrudRepository<Token, Long> {
     Token findBytoken(String token);
     Token findByid(Long id);

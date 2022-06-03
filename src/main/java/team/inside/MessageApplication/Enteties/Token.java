@@ -1,4 +1,4 @@
-package team.inside.TestTask.Enteties;
+package team.inside.MessageApplication.Enteties;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

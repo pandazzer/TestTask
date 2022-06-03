@@ -1,20 +1,19 @@
-package team.inside.TestTask.Components;
+package team.inside.MessageApplication.Components;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import team.inside.TestTask.Constant;
-import team.inside.TestTask.Enteties.Message;
-import team.inside.TestTask.Enteties.Token;
-import team.inside.TestTask.Json.JsonMessage;
-import team.inside.TestTask.Json.JsonSomeMessage;
-import team.inside.TestTask.Repository.MessagesRepository;
+import team.inside.MessageApplication.Constant;
+import team.inside.MessageApplication.Enteties.Message;
+import team.inside.MessageApplication.Enteties.Token;
+import team.inside.MessageApplication.Json.JsonMessage;
+import team.inside.MessageApplication.Json.JsonSomeMessage;
+import team.inside.MessageApplication.Repository.MessagesRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
